@@ -1,0 +1,10 @@
+# compiled ROMs and listings are not distributed
+*.rom
+*.bin
+*.sym
+*.lst
+*.tap
+*.tzx
+*.z80
+*.sna
+.DS_Store
