@@ -1,6 +1,6 @@
 # Multiplication: a loop one byte at a time
 
-**ROM address range:** $3110-$312F, $3CE1-$3CF7  
+**ROM address range:** $3110-$312F, $3CD8-$3CEE  
 **Size of the ranges:** 55 bytes (including the padding inside them)  
 **Replaces:** The 33-step loop of MULTIPLY (`$3110` to `$312F`)  
 **Manual:** chapter 18 of the *New ZX Spectrum ROM Reference Manual* (summary below)
@@ -20,4 +20,4 @@ The 1982 loop shifted all four bytes of the multiplier in every one of its 33 st
 
 ## License
 
-Freely redistributed.
+CC BY-NC 4.0: free to use and adapt with credit; commercial use needs written permission. See the [LICENSE](../../LICENSE) and [NOTICE](../../NOTICE.md).

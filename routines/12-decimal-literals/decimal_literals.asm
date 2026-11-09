@@ -1,10 +1,11 @@
 ; ---------------------------------------------------------------------------
 ; Decimal literals rounded once
-; ZX Spectrum 48K ROM replacement routine 
-; ROM address range(s): $2CD8-$2CE2, $3BD3-$3BE9, $3CC6-$3CE0   (61 bytes)
+; ZX Spectrum 48K ROM replacement routine -- excerpt of the ROM source
+; ROM address range(s): $2CD8-$2CE2, $3BD3-$3BE9, $3CBD-$3CD7   (61 bytes)
 ; Replaces: The conversion of the digits of a number (DEC-TO-FP)
-; Author: ruijtunes (github.com/ruijtunes)   License: Free to use
-; The routine assembles inside the ROM source (sjasmplus) at the addresses given here.
+; Author: ruijtunes (github.com/ruijtunes)   License: CC BY-NC 4.0 (see LICENSE)
+; The labels (label_XXXX) are those of the standard ROM disassembly; the routine
+; assembles inside the ROM source (sjasmplus) at the addresses given here.
 ; Credit: the DIVISOR routine (10^f), called from here, comes from the Looking Glass ROM and the Gosh Wonderful ROM, both by Geoff Wearmouth.
 ; ---------------------------------------------------------------------------
 
@@ -33,7 +34,7 @@ DEC_BIG:
 	rst	28h
 	DEFB	$0F,$38	; addition: x + F/10^f
 	rst	18h
-	jp	label_2CEB  ;E-FORMAT 
+	jp	label_2CEB
 
 
 	ASSERT $ <= $3D00
@@ -59,4 +60,4 @@ DEC_FRAC:
 	jp	nc,DEC_BIG
 	call	DEC_DIV		; N / 10^f: the only rounding
 	rst	18h
-	jp	label_2CEB   ;;E-FORMAT 
+	jp	label_2CEB

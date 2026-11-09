@@ -11,7 +11,8 @@ Random numbers are generated with an integer routine instead of the floating-poi
 
 ## Results
 
-- 5 times faster and 2 bytes shorter than the 1982 routine.
+- 24 times faster and 2 bytes shorter than the 1982 routine.
+- Measured: 47,069 T-states per RND in the 1982 ROM against 1,972 (23.9 times faster, 5,000 calls). In BASIC, `LET A=RND` takes 52,735 T-states against 7,685 (6.9 times faster), and the loop `FOR I=1 TO 1000: LET A=RND: NEXT I` is 3.2 times faster.
 
 ## Code
 
@@ -22,4 +23,5 @@ Random numbers are generated with an integer routine instead of the floating-poi
 The generator is by Dr. Andy Wright (SAM Coupé ROM v3.0), who in 2008 allowed all his ROMs to be freely redistributed.
 
 ## License
-Free to use
+
+CC BY-NC 4.0: free to use and adapt with credit; commercial use needs written permission. See the [LICENSE](../../LICENSE) and [NOTICE](../../NOTICE.md).

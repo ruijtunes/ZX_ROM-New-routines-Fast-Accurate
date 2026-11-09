@@ -1,10 +1,11 @@
 ; ---------------------------------------------------------------------------
 ; Multiplication: a loop one byte at a time
 ; ZX Spectrum 48K ROM replacement routine -- excerpt of the ROM source
-; ROM address range(s): $3110-$312F, $3CE1-$3CF7   (55 bytes)
+; ROM address range(s): $3110-$312F, $3CD8-$3CEE   (55 bytes)
 ; Replaces: The 33-step loop of MULTIPLY ($3110 to $312F)
-; Author: ruijtunes (github.com/ruijtunes)   License: Free to use
-; The routine assembles inside the ROM source (sjasmplus) at the addresses given here.
+; Author: ruijtunes (github.com/ruijtunes)   License: CC BY-NC 4.0 (see LICENSE)
+; The labels (label_XXXX) are those of the standard ROM disassembly; the routine
+; assembles inside the ROM source (sjasmplus) at the addresses given here.
 ; ---------------------------------------------------------------------------
 
 ; THE LOOP OF THE MULTIPLICATION, ONE BYTE OF THE MULTIPLIER AT A TIME  (Chapter 18)

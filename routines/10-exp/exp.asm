@@ -1,10 +1,11 @@
 ; ---------------------------------------------------------------------------
 ; EXP: exact reduction and a polynomial loop
 ; ZX Spectrum 48K ROM replacement routine -- excerpt of the ROM source
-; ROM address range(s): $36C4-$370D, $39F1-$39FD, $3AAC-$3ADE   (138 bytes)
+; ROM address range(s): $36C4-$370D, $39EB-$39F7, $3AAC-$3ADE   (138 bytes)
 ; Replaces: EXP at $36C4
 ; Author: ruijtunes (github.com/ruijtunes)   License: CC BY-NC 4.0 (see LICENSE)
-; The routine assembles inside the ROM source (sjasmplus) at the addresses given here.
+; The labels (label_XXXX) are those of the standard ROM disassembly; the routine
+; assembles inside the ROM source (sjasmplus) at the addresses given here.
 ; ---------------------------------------------------------------------------
 
 	DS	$36C4-$,$FF	; EXP stays at $36C4
@@ -35,7 +36,7 @@ EXP_LP:	DEFB	$E0		;;get-mem-0      ... p, r
 	DEFB    $38
 
         call    label_2DD5
-        jp      nz,EXP_NEGT          ; n < 0: the rest is in EXP_NEGT 
+        jp      nz,EXP_NEGT          ; n < 0: the rest is in EXP_NEGT (in the free space of the page $3C)
 
         jr      c,label_3703
 
@@ -61,6 +62,9 @@ EXP_NEGT:
 	ret
 EXP_NZ:	xor	a
 	jp	label_350B	; FP-0/1 with carry clear writes an integer zero over the value
+
+
+IPOW_END:
 
 ; ----------------------------------------------------------------------------
 ; EXP_REDUCE: the argument reduction of EXP, with ln 2 in two parts (Cody and Waite).

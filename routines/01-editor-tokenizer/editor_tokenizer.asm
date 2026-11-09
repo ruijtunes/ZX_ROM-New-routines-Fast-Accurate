@@ -1,13 +1,29 @@
 ; ---------------------------------------------------------------------------
 ; Editor: letter-by-letter keywords and the tokenizer
-; ZX Spectrum 48K ROM replacement routine
-; ROM address range(s): $38F7-$39F0, $3CA0-$3CC5   (288 bytes)
+; ZX Spectrum 48K ROM replacement routine -- excerpt of the ROM source
+; ROM address range(s): $38F1-$39EA, $3C97-$3CBC, $3C47-$3C62, $38D8-$38E7   (332 bytes)
 ; Replaces: The K mode of the keyboard decoding (keyword tables) and the keyword-from-key path of the editor
-; Author: ruijtunes (github.com/ruijtunes)   License: Free to use
-; The routine assembles inside the ROM source (sjasmplus) at the addresses given here.
+; Author: ruijtunes (github.com/ruijtunes)   License: CC BY-NC 4.0 (see LICENSE)
+; The labels (label_XXXX) are those of the standard ROM disassembly; the routine
+; assembles inside the ROM source (sjasmplus) at the addresses given here.
+; Credit: key assignments (SYM+Q/E/W, SYM+digit in E mode) follow OpenSE BASIC by Andrew Owen (GPL v2); the code is new.
 ; ---------------------------------------------------------------------------
 
-; THE 'EDITOR' WITH LETTER-BY-LETTER ENTRY OF THE BASIC WORDS
+label_3CDD:
+; Token -> character table of the symbol gate: SYMBOL SHIFT + letter.
+; Second byte: the character that replaces the token. LOAD (SYM+Q), RUN (SYM+E) and CODE (SYM+W) are not here:
+; a token that is not in the table is a keyword that the key must give, and it passes through.
+	DEFB	$C6, $5B    ; AND  (SYM+Y) -> '['
+	DEFB	$C5, $5D    ; OR   (SYM+U) -> ']'
+	DEFB	$AC, $7F    ; AT   (SYM+I) -> copyright sign (the only key that gives it)
+	DEFB	$E2, $7E    ; STOP (SYM+A) -> '~'
+	DEFB	$C3, $7C    ; NOT  (SYM+S) -> '|'
+	DEFB	$CD, $5C    ; STEP (SYM+D) -> backslash
+	DEFB	$CC, $7B    ; TO   (SYM+F) -> '{'
+	DEFB	$CB, $7D    ; THEN (SYM+G) -> '}'
+
+
+; THE 'EDITOR' WITH LETTER-BY-LETTER ENTRY OF THE BASIC WORDS  (NEWED)
 ;   There is a single mode: the keywords are typed as letters, in any case
 ;   (print, PRINT, Print), and the editor is the original one.  When ENTER is
 ;   pressed - and only for a program line or a direct command, never for INPUT -
@@ -27,14 +43,15 @@
 ;   If a word fails the test the search goes on with the next word of the table
 ;   ("IN" is skipped for INK and INPUT, "AT" for ATN) and, if no word fits, the whole
 ;   identifier is skipped.
-NEWEDITOR:
+NEWED:
 label_3901:
-	call	SETLMODE			; L mode; leaves HL = FLAGS
+	res	3, (iy + $02)		; no mode change pending
+	call	IMPOSE			; L mode; leaves HL = FLAGS
 	dec	l			; HL = ERR_NR
 	ld	(hl), $FF		; 'OK'
 	call	label_0F2C		; the original EDITOR prepares the line
 	bit	5, (iy + $37)		; FLAGX: is it INPUT?
-	ret	nz			    ; yes: the line stays as it was typed
+	ret	nz			; yes: the line stays as it was typed
 	ld	hl, ($5C59)		; E_LINE
 	ld	b, 1			; B = 1: delete the spaces around a word that becomes a token
 					; and on to TOKENIZE
@@ -211,6 +228,33 @@ TK_PUT:
 	jp	TK_LOOP
 
 
+; THE SYMBOL GATE: a token that comes from the keyboard (A >= $A5), in KEY-INPUT and in the REM K legend
+;   - In graphics mode the keys V to Z give RND, INKEY$, PI, FN and POINT. In the editor they give nothing: no
+;     character is inserted and the graphics mode does not change. (INKEY$ is not changed.)
+;   - In any other mode the token is looked up in the table of the symbols (SYMBOL SHIFT + letter) and replaced
+;     by the character that the key gives. A token that is not in the table (LOAD, RUN, CODE) passes through.
+label_3CA6:
+	bit	1, (iy + $07)	; graphics mode?
+	jr	z, GATE_L
+	ld	(iy + $07), $00	; MODE = 0 and the code $0F (GRAPHICS): KEY-INPUT turns it back into graphics mode,
+	ld	a, $0F		; so nothing is inserted and the mode does not change
+	ret
+GATE_L:
+	ld	hl, label_3CDD
+	ld	b, $08
+GATE_LP:
+	cp	(hl)
+	inc	hl
+	jr	nz, GATE_NX
+	ld	a, (hl)		; the character of this key
+	ret
+GATE_NX:
+	inc	hl
+	djnz	GATE_LP
+	ret			; not in the table: the token itself
+
+
+; ---- the tokenizer helper routines (moved here to make room for the new IPOW) ----
 ; ---- no word fits: skip the whole identifier (or the '<' / '>')
 TK_NOKW:
 	pop	hl			; the start of the word

@@ -1,6 +1,6 @@
 # Decimal literals rounded once
 
-**ROM address range:** $2CD8-$2CE2, $3BD3-$3BE9, $3CC6-$3CE0  
+**ROM address range:** $2CD8-$2CE2, $3BD3-$3BE9, $3CBD-$3CD7  
 **Size of the ranges:** 61 bytes (including the padding inside them)  
 **Replaces:** The conversion of the digits of a number (DEC-TO-FP)  
 **Manual:** chapter 13 of the *New ZX Spectrum ROM Reference Manual* (summary below)
@@ -25,4 +25,4 @@ The routine `DIVISOR`, which builds D = 10^f by multiplying by ten once per frac
 
 ## License
 
-Free to use.
+CC BY-NC 4.0: free to use and adapt with credit; commercial use needs written permission. See the [LICENSE](../../LICENSE) and [NOTICE](../../NOTICE.md).

@@ -1,6 +1,6 @@
 # EXP: exact reduction and a polynomial loop
 
-**ROM address range:** $36C4-$370D, $39F1-$39FD, $3AAC-$3ADE  
+**ROM address range:** $36C4-$370D, $39EB-$39F7, $3AAC-$3ADE  
 **Size of the ranges:** 138 bytes (including the padding inside them)  
 **Replaces:** EXP at `$36C4`  
 **Manual:** chapter 11 of the *New ZX Spectrum ROM Reference Manual* (summary below)
